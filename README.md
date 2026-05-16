@@ -1,4 +1,4 @@
-# Week 6 — Express Web Application
+# Express Web Application
 
 A simple Express.js web application built as part of a Web Programming course assignment.
 
