@@ -19,7 +19,7 @@ export default function appSrc(express, bodyParser, createReadStream, crypto, ht
   });
 
   app.get('/login/', (req, res) => {
-    res.send('itmo1234567');
+    res.send('bulkahleba');
   });
 
   app.get('/code/', (req, res) => {
