@@ -53,7 +53,7 @@ export default function appSrc(express, bodyParser, createReadStream, crypto, ht
   });
 
   app.all('*', (req, res) => {
-    res.send('itmo1234567');
+    res.send('bulkahleba');
   });
 
   return app;
