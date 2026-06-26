@@ -7,7 +7,7 @@ const HTML_FORM = `<!DOCTYPE html>
 <body>
   <form method="POST" action="/zipper" enctype="multipart/form-data">
     <input type="file" name="file" required>
-    <button type="submit">Compress</button>
+    <button type="submit">Submit</button>
   </form>
 </body>
 </html>`;
@@ -23,30 +23,17 @@ function readBody(req) {
 
 function extractFile(body, boundary) {
   const dash = '--' + boundary;
-  let pos = body.indexOf(dash);
+  const pos = body.indexOf(dash);
   if (pos === -1) return null;
-  pos += dash.length + 2;
 
-  while (pos < body.length) {
-    const headersEnd = body.indexOf('\r\n\r\n', pos);
-    if (headersEnd === -1) break;
+  const headersEnd = body.indexOf('\r\n\r\n', pos + dash.length);
+  if (headersEnd === -1) return null;
 
-    const headers = body.slice(pos, headersEnd).toString();
-    const contentStart = headersEnd + 4;
-    const nextBoundary = body.indexOf('\r\n--' + boundary, contentStart);
-    const contentEnd = nextBoundary === -1 ? body.length : nextBoundary;
+  const contentStart = headersEnd + 4;
+  const nextBoundary = body.indexOf('\r\n--' + boundary, contentStart);
+  const contentEnd = nextBoundary === -1 ? body.length : nextBoundary;
 
-    if (headers.includes('filename=')) {
-      return body.slice(contentStart, contentEnd);
-    }
-
-    if (nextBoundary === -1) break;
-    pos = nextBoundary + ('\r\n--' + boundary).length;
-    if (body.slice(pos, pos + 2).toString() === '--') break;
-    pos += 2;
-  }
-
-  return null;
+  return body.slice(contentStart, contentEnd);
 }
 
 const app = express();
